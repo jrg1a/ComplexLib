@@ -49,6 +49,10 @@ public static class ComplexOperations
     public static Complex Divide(Complex a, Complex b)
     {
         double denominator = Math.Pow(b.RealPart, 2) + Math.Pow(b.ImaginaryPart, 2);
+        if (denominator == 0)
+        {
+            throw new DivideByZeroException("Cannot divide by a complex number with zero magnitude.");
+        }
         double realPart = (a.RealPart * b.RealPart + a.ImaginaryPart * b.ImaginaryPart) / denominator;
         double imaginaryPart = (a.ImaginaryPart * b.RealPart - a.RealPart * b.ImaginaryPart) / denominator;
         return new Complex(realPart, imaginaryPart);

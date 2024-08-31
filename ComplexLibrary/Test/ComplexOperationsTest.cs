@@ -55,6 +55,17 @@ public class ComplexOperationsTests
         var result = ComplexOperations.Divide(a, b);
         Assert.Equal(new Complex(0.44, 0.08), result, new ComplexEqualityComparer());
     }
+    
+    // TODO: Add tests for the Polar method.
+    // TODO: Add tests for the Parse method.
+    // TODO: Add tests for the ToString method.
+    // TODO: Add tests for the Equals method.
+    // TODO: Add tests for the GetHashCode method.
+    // TODO: Add tests for the operators.
+    // etc.
+    
+    
+    
 }
 
 
