@@ -148,31 +148,49 @@ public class Complex
         return ComplexOperations.Divide(a, b);
     }
 
-    /// <summary>
-    /// Converts the string representation of a complex number to its <see cref="Complex"/> equivalent.
-    /// </summary>
-    /// <param name="s">A string that contains a complex number to convert.</param>
-    /// <returns>A <see cref="Complex"/> equivalent to the complex number contained in <paramref name="s"/>.</returns>
+
     public static Complex Parse(string s)
     {
-        s = s.Replace(" ", "").Replace("i", "");
+        s = s.Replace(" ", "");
         double real = 0, imaginary = 0;
-        bool isNegative = s.Contains("-");
-        string[] parts = s.Split(new char[] { '+', '-' }, StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length == 2)
+        bool hasReal = false, hasImaginary = false;
+
+        // Finn plasseringen av "i"
+        int iIndex = s.IndexOf('i');
+
+        if (iIndex != -1)
         {
-            real = double.Parse(parts[0]);
-            imaginary = double.Parse(parts[1]);
-            if (isNegative) imaginary = -imaginary;
+            // Håndter imaginær del
+            string imaginaryPart = s.Substring(0, iIndex);
+            if (string.IsNullOrEmpty(imaginaryPart) || imaginaryPart == "+")
+                imaginary = 1;
+            else if (imaginaryPart == "-")
+                imaginary = -1;
+            else
+                imaginary = double.Parse(imaginaryPart);
+
+            hasImaginary = true;
+
+            // Sjekk for reell del foran imaginær
+            if (iIndex > 0)
+            {
+                int plusMinusIndex = Math.Max(s.LastIndexOf('+', iIndex - 1), s.LastIndexOf('-', iIndex - 1));
+                if (plusMinusIndex > 0)
+                {
+                    real = double.Parse(s.Substring(0, plusMinusIndex));
+                    hasReal = true;
+                }
+            }
         }
-        else if (s.EndsWith("i"))
+
+        if (!hasImaginary)
         {
-            imaginary = double.Parse(parts[0]);
+            // Håndter tilfeller uten imaginær del, kun reell del
+            real = double.Parse(s);
+            hasReal = true;
         }
-        else
-        {
-            real = double.Parse(parts[0]);
-        }
+
+        // Returner det komplekse tallet
         return new Complex(real, imaginary);
     }
 }
